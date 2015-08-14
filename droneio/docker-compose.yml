@@ -1,0 +1,55 @@
+drone-followers:
+  tty: true
+  image: rancher/socat-docker:v0.2.0
+  volumes:
+  - /var/run/docker.sock:/var/run/docker.sock
+  - /var/lib/docker:/var/lib/docker
+  stdin_open: true
+  labels:
+    role: follower
+    io.rancher.scheduler.global: 'true'
+    io.rancher.scheduler.affinity:host_label: drone.role=follower
+    io.rancher.scheduler.affinity:container_label_ne: role=follower
+drone-leader:
+  ports:
+  - 80:80/tcp
+  restart: 'no'
+  environment:
+    WORKER_DNS: followers
+    WORKERS: 2
+    DRONE_GITHUB_CLIENT: '<gh oauth client id>'
+    DRONE_GITHUB_SECRET: '<gh oauth client secret>'
+    DRONE_DATABASE_DRIVER: 'mysql'
+    DRONE_DATABASE_DATASOURCE: 'drone:drone@tcp(mysql:3306)/drone?timeout=120s'
+    DRONE_GITHUB_OPEN: 'false'
+  tty: true
+  image: rancher/drone-sd:v0.3.0
+  links:
+  - drone-followers:followers
+  - mysql-drone:mysql
+  stdin_open: true
+  labels:
+    role: leader
+    io.rancher.scheduler.affinity:host_label: drone.role=leader
+mysql-drone:
+  image: mysql:5.6
+  restart: always
+  environment:
+    MYSQL_ROOT_PASSWORD: supersecret
+    MYSQL_DATABASE: drone
+    MYSQL_USER: drone
+    MYSQL_PASSWORD: drone
+  volumes:
+    - /data/mysql:/var/lib/mysql
+  labels:
+    io.rancher.scheduler.affinity:host_label: drone.role=leader
+volume-cleanup:
+  image: cloudnautique/vol-cleanup:v0.1.0
+  volumes:
+    - /var/lib/docker:/var/lib/docker
+    - /var/run/docker.sock:/var/run/docker.sock
+  command: "-i 10"
+  labels:
+    role: volume-cleanup
+    io.rancher.scheduler.global: 'true'
+    io.rancher.scheduler.affinity:container_label_ne: role=volume-cleanup
