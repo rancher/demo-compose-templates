@@ -1,0 +1,5 @@
+lb:
+  default_cert: wildcard-space
+  load_balancer_config:
+    lb_cookie_stickiness_policy:
+      cookie: session
