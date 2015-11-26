@@ -1,0 +1,9 @@
+mysql:
+  labels:
+    io.rancher.scheduler.affinity:host_label: web=true
+  image: mysql
+  environment:
+    MYSQL_DATABASE: ampache
+    MYSQL_USER: ampache
+    MYSQL_PASSWORD: ampache
+    MYSQL_ALLOW_EMPTY_PASSWORD: yes

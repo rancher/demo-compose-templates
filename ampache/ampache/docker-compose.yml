@@ -1,0 +1,28 @@
+ampache:
+  labels:
+    io.rancher.scheduler.affinity:host_label: web=true
+    io.rancher.sidekicks: ampache-data,ampache-cfg
+  image: ampache/ampache
+  external_links:
+  - db/mysql:mysql
+  volumes_from:
+  - ampache-data
+  volume_driver: convoy-gluster
+  volumes:
+  - media-1:/media
+
+ampache-data:
+  image: tianon/true
+  labels:
+    io.rancher.container.start_once: true
+  net: none
+  volumes:
+  - /var/www/config
+  - /var/www/play
+  - /var/www/rest
+
+ampache-cfg:
+  image: ibuildthecloud/ampache-cfg:v0
+  net: container:ampache
+  volumes_from:
+  - ampache-data

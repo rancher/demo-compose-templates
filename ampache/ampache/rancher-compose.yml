@@ -1,0 +1,4 @@
+ampache:
+  metadata:
+    db_user: ampache
+    db_pass: ampache
