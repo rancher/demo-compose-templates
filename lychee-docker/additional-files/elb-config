@@ -1,0 +1,4 @@
+# From http://docs.aws.amazon.com/ElasticLoadBalancing/latest/DeveloperGuide/enable-proxy-protocol.html
+
+aws elb create-load-balancer-policy --load-balancer-name demo-lb --policy-name my-ProxyProtocol-policy --policy-type-name ProxyProtocolPolicyType --policy-attributes AttributeName=ProxyProtocol,AttributeValue=true
+aws elb set-load-balancer-policies-for-backend-server --load-balancer-name demo-lb --instance-port 8080 --policy-names my-ProxyProtocol-policy

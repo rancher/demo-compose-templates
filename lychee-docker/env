@@ -1,0 +1,4 @@
+export RANCHER_URL=https://rancher.itsgoingto.space
+export RANCHER_ACCESS_KEY=0D3C1E558028DCD196CD
+export RANCHER_SECRET_KEY=g9G6eo9J3K4EkKVkvxPpMWtWjcNP55cmqjGWAM6g
+

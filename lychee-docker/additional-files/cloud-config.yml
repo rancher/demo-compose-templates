@@ -1,0 +1,10 @@
+#cloud-config
+rancher:
+  services:
+    register:
+      privileged: true
+      volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      image: rancher/agent:v0.8.2
+      command:
+      - https://rancher.itsgoingto.space/v1/scripts/B7D7E336A18AF8AACB87:1450375200000:9FkhtNtOzHT7ZikCutqE0Kb7Hk
