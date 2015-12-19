@@ -1,0 +1,5 @@
+mysql:
+  hostname: rancherdb-2.cw8dvqlpov6v.us-west-2.rds.amazonaws.com
+
+lb:
+  default_cert: space

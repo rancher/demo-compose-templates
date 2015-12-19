@@ -1,0 +1,31 @@
+mysql:
+  environment:
+    MYSQL_RANDOM_ROOT_PASSWORD: yes
+    MYSQL_USER: lychee
+    MYSQL_PASSWORD: lychee
+    MYSQL_DATABASE: lychee
+  image: mysql
+
+lychee:
+  image: ibuildthecloud/lychee
+  links:
+  - mysql
+  - redis
+  volume_driver: convoy-nfs
+  volumes:
+  - myuploads-nfs2:/uploads
+  - mydata-nfs2:/data
+
+redis:
+  image: redis
+
+lb:
+  labels:
+    io.rancher.scheduler.global: 'true'
+    io.rancher.loadbalancer.ssl.ports: '443'
+  image: rancher/load-balancer-service
+  links:
+  - lychee
+  ports:
+  - 443:80
+  - 80:80
